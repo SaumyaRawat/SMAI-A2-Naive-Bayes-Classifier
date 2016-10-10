@@ -1,0 +1,4 @@
+Prob1/dataset/census-income.data filter=lfs diff=lfs merge=lfs -text
+Prob3/dataset/dorothea_test.data filter=lfs diff=lfs merge=lfs -text
+Prob3/dataset/dorothea_train.data filter=lfs diff=lfs merge=lfs -text
+Prob3/dataset/dorothea_valid.data filter=lfs diff=lfs merge=lfs -text
