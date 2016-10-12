@@ -1,7 +1,7 @@
 #!/bin/python
 
 import pandas as pd
-from sklearn.preprocessing import MaxAbsScaler
+from sklearn.preprocessing import KernelCenterer
 import numpy as np
 import array
 from scipy.sparse import csr_matrix, linalg, lil_matrix
@@ -9,9 +9,9 @@ import plotly.plotly as py
 from plotly.graph_objs import *
 import plotly.tools as tls
 from copy import deepcopy
-import global_variables as gv
 
-gv.init()
+
+
 lines = open('dataset/dorothea_train.data', 'r').readlines()
 dataList = [line.rstrip('\n') for line in lines]
 k = len(max(dataList,key=len))
@@ -36,8 +36,7 @@ for i in range(train_data.shape[0]):
 
 #train_labels = pd.read_csv(filepath_or_buffer='dataset/dorothea_train.labels', header=Non
 
-#Standardizing the data so that all features are on the same scale
-X_std = MaxAbsScaler().fit_transform(X)
+
 #M = X_std.dot(X_std.T) #covariance matrix
       
 #Computing covariance matrix
@@ -71,10 +70,24 @@ k=100
 #Y=np.dot(eVecs.T, X_std.T).T
 
 #Kernel_PCA since d>>n
-S=X_std.dot(X_std.T)
-val,vec=linalg.eigs(S,k,which='LM')
-# d×k-dimensional eigenvector matrix W.
-W=X_std.T.dot(vec)
-Y=X_std.dot(W)
+K=X.dot(X.T)
 
+#Centering Kernel since data has to be standardizied
+kern_cent = KernelCenterer()
+S = kern_cent.fit_transform(K.toarray())
+
+#val,vec=linalg.eigs(S,k,which='LM')
+
+eig_vals, eig_vecs = np.linalg.eig(S)
+eig_pairs = [(np.abs(eig_vals[i]), eig_vecs[:,i]) for i in range(len(eig_vals))]
+# Sort the (eigenvalue, eigenvector) tuples from high to low
+eig_pairs = sorted(eig_pairs, key=lambda k: k[0], reverse=True)
+vec = np.array([ eig_pairs[i][1] for i in range(k)])
+vec = vec.T # to make eigen vector matrix nxk
+
+# d×k-dimensional eigenvector matrix W.
+W=X.T.dot(vec)
+Y=X.dot(W)
+
+global pca_X
 pca_X = deepcopy(Y)
