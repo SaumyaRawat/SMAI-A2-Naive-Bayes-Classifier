@@ -4,11 +4,14 @@ import pandas as pd
 from sklearn.preprocessing import MaxAbsScaler
 import numpy as np
 import array
-from scipy.sparse import csr_matrix, linalg
+from scipy.sparse import csr_matrix, linalg, lil_matrix
 import plotly.plotly as py
 from plotly.graph_objs import *
 import plotly.tools as tls
+from copy import deepcopy
+import global_variables as gv
 
+gv.init()
 lines = open('dataset/dorothea_train.data', 'r').readlines()
 dataList = [line.rstrip('\n') for line in lines]
 k = len(max(dataList,key=len))
@@ -26,8 +29,13 @@ train_data = pd.read_csv(
     engine = 'python')
 
 train_data=train_data.fillna(0)
-X = csr_matrix(train_data.values)
+X = lil_matrix((train_data.shape[0],100001))
+for i in range(train_data.shape[0]):
+   X[i,train_data[i]] = 1
+
+
 #train_labels = pd.read_csv(filepath_or_buffer='dataset/dorothea_train.labels', header=Non
+
 #Standardizing the data so that all features are on the same scale
 X_std = MaxAbsScaler().fit_transform(X)
 #M = X_std.dot(X_std.T) #covariance matrix
@@ -68,3 +76,5 @@ val,vec=linalg.eigs(S,k,which='LM')
 # d×k-dimensional eigenvector matrix W.
 W=X_std.T.dot(vec)
 Y=X_std.dot(W)
+
+pca_X = deepcopy(Y)
