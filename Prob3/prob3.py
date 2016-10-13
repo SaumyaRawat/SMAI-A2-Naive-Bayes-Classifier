@@ -102,17 +102,17 @@ if __name__ == "__main__":
 		
 		# PCA
 		model_pca = Model(pca_X,train_labels)
-		splitRatio = 0.7
+		splitRatio = 0.5
 		model_pca.k_fold_split(splitRatio)
 		print('Size of train=',len(model_pca.trainingSet),' and test=',len(model_pca.testSet))
 		model_pca.train_classifier(0)
 		predictions = model_pca.test_classifier()
 		accuracy_pca = model_pca.get_accuracy(predictions)
-		print('Accuracy after PCA(K==100): ',accuracy_pca)
+		print('Accuracy after PCA(K==500): ',accuracy_pca)
 		
 		# LDA
 		model_lda = Model(lda_X,train_labels)
-		splitRatio = 0.7
+		splitRatio = 0.5
 		model_lda.k_fold_split(splitRatio)
 		print('Size of train=',len(model_lda.trainingSet),' and test=',len(model_lda.testSet))
 		model_lda.train_classifier(1)

@@ -94,6 +94,8 @@ class Model:
     	return (correct/float(len(self.testSet))) * 100.0
 
 if __name__ == "__main__":
+    accuracy_mat = []
+    for t in range(10):
         model = Model("dataset/train_data.csv")
         model.load_database()
         splitRatio = 0.7
@@ -102,4 +104,8 @@ if __name__ == "__main__":
         model.summarize_by_class()
         predictions = model.test_classifier()
         accuracy = model.get_accuracy(predictions)
-        print('Accuracy: ',accuracy)
+        print('Accuracy[',t,']: ',accuracy)
+        accuracy_mat.append(accuracy)
+    mean_accuracy = np.mean(accuracy_mat)
+    stddev_accuracy = np.std(accuracy_mat,ddof = 1)
+    print('For 10 runs, Mean Accuracy : ',mean_accuracy,' and Standard Deviation: ',stddev_accuracy)

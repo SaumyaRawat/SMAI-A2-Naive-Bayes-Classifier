@@ -52,8 +52,8 @@ for i in range(train_data.shape[0]):
 #cov_mat = np.dot(cov_mat,cov_mat.T)/(nsamples -1)
     
 #EigenDecomposition : 
-k=100
-#k=500
+#k=100
+k=500
 #k=1000
 
 #eVals, eVecs = linalg.eigs(M,k,which='LM')

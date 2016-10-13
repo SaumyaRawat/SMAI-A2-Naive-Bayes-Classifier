@@ -16,7 +16,7 @@ def coding(col, codeDict):
  
  #Create a new function:
 def num_missing(x):
-  return sum(x.isnull())
+  return mode(x.isnull())
 
 
 if __name__ == "__main__":
@@ -24,7 +24,7 @@ if __name__ == "__main__":
      test_data = read_data("dataset/census-income.data")
 
     #Applying per column:
-     #print(train_data.apply(num_missing, axis=0)) #axis=0 defines that function is to be applied on each column
+     print(train_data.apply(num_missing, axis=0)) #axis=0 defines that function is to be applied on each column
 
     #Binning ages
      #plt.hist(list(train_data['age']), facecolor='green', alpha=0.75, bins=9)
@@ -37,14 +37,14 @@ if __name__ == "__main__":
      test_data['age'] = pd.cut(test_data['age'], bins, labels=group_names)
 
      #Binning wage per hour
-     #train_data.hist(column="wage_per_hour",bins=30)
-     #group_names = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
-     #train_data['wage_per_hour'] = pd.qcut(train_data['wage_per_hour'], 30, labels=group_names)
+     train_data.hist(column="wage_per_hour",bins=30)
+     group_names = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+     train_data['wage_per_hour'] = pd.qcut(train_data['wage_per_hour'], 30, labels=group_names)
      
      #Binning capital_gains
-     #train_data.hist(column="capital_gains",bins=30)
-     #group_names = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
-     #train_data['capital_gains'] = pd.qcut(train_data['capital_gains'], 30, labels=group_names)
+     train_data.hist(column="capital_gains",bins=30)
+     group_names = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+     train_data['capital_gains'] = pd.qcut(train_data['capital_gains'], 30, labels=group_names)
      
     #Nominal labels to numeric values
      cat_columns = train_data.select_dtypes(['object']).columns
@@ -53,8 +53,9 @@ if __name__ == "__main__":
 
      test_data[cat_columns] = test_data[cat_columns].apply(lambda x: x.astype('category'))
      test_data[cat_columns] = test_data[cat_columns].apply(lambda x: x.cat.codes)
+     
      #Coding LoanStatus as Y=1, N=0:
-     #train_data[cat_columns] = coding(train_data[cat_columns], {'N':0,'Y':1})
+     train_data[cat_columns] = coding(train_data[cat_columns], {'N':0,'Y':1})
 
      train_data.to_csv("dataset/train_data.csv", sep=',')
      test_data.to_csv("dataset/test_data.csv", sep=',')

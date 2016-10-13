@@ -17,10 +17,7 @@ train_labels[class_indices[0]] = 0
 n = pca_X.shape[0]
 d = pca_X.shape[1]
 
-#pca_X = np.real(pca_X)
-
 #Calculate n dimensional means
-
 overall_mean = np.mean(pca_X, axis=0)
 mean_vectors = []
 for class_no in range(2):
